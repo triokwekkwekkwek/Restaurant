@@ -105,15 +105,15 @@ function combineAndSendForms() {
  
   var pesanan = createJSON();
 
-  sendRequest(pesanan)
+  sendRequest(pesanan);
 }
 
 function sendRequest(data) {
-  var xhr = new XMLHttpRequest();
-  var url = "/pemesanan";
-  xhr.open("POST", url, true);
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.onreadystatechange = function () {
+    var xhr = new XMLHttpRequest();
+    var url = "/pemesanan";
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function () {
   };
 
   xhr.send(data);
@@ -126,7 +126,7 @@ function createJSON() {
       var nama_hidangan = $(this).val();
 
       item = {}
-      item ["nama-hidangan"] = nama_hidangan;
+      item ["nama_hidangan"] = nama_hidangan;
       item ["kuantitas"] = kuantitas;
 
       jsonObj.push(item);
@@ -134,3 +134,48 @@ function createJSON() {
 
   return JSON.stringify(jsonObj);
 }
+
+// function completeOrder(orders) {
+//   const final_orders = JSON.parse(orders);
+//   var target = document.createElement("ul");
+//   var button = document.createElement("button");
+
+//   console.log(typeof(final_orders));
+
+//   for (var i = 0; i < final_orders.length; i++){
+//     console.log(final_orders[i].nama_hidangan);
+//     var list = document.createElement("li");
+//     var nama_hidangan = '';
+//     var kuantitas = '';
+
+//     list.setAttribute("class", "order-list");
+//     list.setAttribute("data-ref", i);
+//     list.setAttribute("id", "hidangan-" + i);
+//     nama_hidangan = document.createTextNode(final_orders[i].nama_hidangan);
+//     kuantitas = document.createTextNode(final_orders[i].kuantitas);
+
+//     list.appendChild(nama_hidangan);
+//     list.appendChild(document.createTextNode(" "));
+//     list.appendChild(kuantitas);
+
+//     target.appendChild(list);
+//   }
+
+//   console.log(ul)
+//   button.setAttribute("id", "complete-order-button");
+//   button.appendChild(document.createTextNode("Bayar"));
+
+//   $(document.body).append(target);
+// }
+
+// function update_status_pemesanan(val) {
+//     function editMenu(val) {
+//       var x = document.getElementById("input-form_" + val);
+//       if (x.style.display === "none") {
+//         x.style.display = "block";
+//       } else {
+//         x.style.display = "none";
+//       }
+//   }
+
+// }

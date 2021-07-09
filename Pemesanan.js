@@ -41,7 +41,7 @@ app.post('/pemesanan', (req, res) => {
 
     for (i = 0; i <  count; i++) {
         embeddedDocument.push({  
-            nama : req.body[i]['nama-hidangan'],
+            nama : req.body[i]['nama_hidangan'],
             kuantitas : parseInt(req.body[i]['kuantitas']),
         })
     }
@@ -55,9 +55,11 @@ app.post('/pemesanan', (req, res) => {
 
     db.collection('Pemesanan').insertOne(document)
     .then(result => {
-        res.redirect('/');
+        
     })
     .catch(error => console.error(error))
+
+    res.send('<h1>Hello Express!</h1>');
 })
 
 function createAlias() {
