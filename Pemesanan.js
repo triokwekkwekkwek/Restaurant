@@ -35,28 +35,38 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.post('/pemesanan', (req, res) => {
-    console.log(req)
-    // var embeddedDocument = [];
-    // var i;
-    // for (i = 0; i < req.length; i++) {
-    //     // embeddedDocument.push({  
-    //     //     id_hidangan: {
-    //     //         "$ref": "Menu",
-    //     //         "$id": db.collection('Menu').find({"nama" : req.body.name})
-    //     //     },
-    //     //     kuantitas : req.body.value,
-    //     //     status: false
-    //     // })
-    // }
-    // var document = {_id: new require('mongodb').ObjectID, 
-    //                 createdAt: new require('mongodb').Date,
-    //                 pesanan: embeddedDocument,
-    //             }
-    // console.log(embeddedDocument)
+    var count = Object.keys(req.body).length;
+    var embeddedDocument = [];
+    var i;
 
-    // menuCollection.insertOne(document)
-    // .then(result => {
-    //     res.redirect('/');
-    // })
-    // .catch(error => console.error(error))
+    for (i = 0; i <  count; i++) {
+        embeddedDocument.push({  
+            nama : req.body[i]['nama-hidangan'],
+            kuantitas : parseInt(req.body[i]['kuantitas']),
+        })
+    }
+
+    var document = {_id: new require('mongodb').ObjectID,
+                    alias_name: createAlias(),
+                    createdAt: new Date(),
+                    pesanan: embeddedDocument,
+                    status: false
+    }
+
+    db.collection('Pemesanan').insertOne(document)
+    .then(result => {
+        res.redirect('/');
+    })
+    .catch(error => console.error(error))
 })
+
+function createAlias() {
+    const characters ='abcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const charactersLength = characters.length;
+    for ( let i = 0; i < 5; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+
+    return result;
+}

@@ -78,52 +78,59 @@ function decrement(val) {
 
 function combineAndSendForms() {
   var form = document.createElement("form");
-  form.setAttribute("method", "POST");
-  form.setAttribute("action", "/pemesanan");
-
   var button = document.createElement("button");
   button.setAttribute("type", "submit")
   button.setAttribute("value", "submit")
 
   form.setAttribute("type", "submit")
-  form.appendChild(button)
-
-  // var $newForm = $("<form></form>")    
-  //     .attr({method : "POST", action : "/pemesanan"}) 
-  // ;
+  
   var inputs = document.querySelectorAll('input');
   var i;
 
   for(i = 0; i < inputs.length; i++) {
     var value = inputs[i].value;
-    // var name = inputs[key]
-
-    // console.log(inputs[key].getAttribute('data-name'))
-    // console.log(inputs[key].value)
     
     if(value > 0) {
-      // form.appendChild(inputs[i]);
-      form.append($("<input type=\"hidden\" />")   
-            .attr(inputs[i].getAttribute('data-name'), this.name)  
-            .value($(this).value()));   
+      var input_hidangan = document.createElement("input");
+      input_hidangan.setAttribute("type", "hidden");
+      input_hidangan.setAttribute("name", "hidangan");
+      input_hidangan.setAttribute("value", inputs[i].getAttribute('data-name'));
+      input_hidangan.setAttribute("kuantitas", value);
+
+      form.appendChild(input_hidangan);
     }
   }
-  document.body.appendChild(form);
 
-  // console.log(filled);
-  
-  // $(":input:not(:submit, :button)").each(function() {  // grab all the useful inputs
-  //     if($(this).value() != 0) {
-  //         $newForm.append($("<input type=\"hidden\" />")   // create a new hidden field
-  //           .attr('data-name', this.name)   // with the same name (watch out for duplicates!)
-  //           .value($(this).value())        // and the same value
-  //       );
-  //     }
-  // });
-  // $newForm
-  //     .appendTo(document.body)  // not sure if this is needed?
-  //     .submit()                 // submit the form
-  // ;
+  $(document.body).append(form);
+ 
+  var pesanan = createJSON();
 
-  console.log(form);
+  sendRequest(pesanan)
+}
+
+function sendRequest(data) {
+  var xhr = new XMLHttpRequest();
+  var url = "/pemesanan";
+  xhr.open("POST", url, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.onreadystatechange = function () {
+  };
+
+  xhr.send(data);
+}
+function createJSON() {
+  jsonObj = [];
+  $("input[name=hidangan]").each(function() {
+
+      var kuantitas = $(this).attr("kuantitas");
+      var nama_hidangan = $(this).val();
+
+      item = {}
+      item ["nama-hidangan"] = nama_hidangan;
+      item ["kuantitas"] = kuantitas;
+
+      jsonObj.push(item);
+  });
+
+  return JSON.stringify(jsonObj);
 }
