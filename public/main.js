@@ -31,11 +31,11 @@ $('button').each(function() {
     else if ($(this).attr("id") === "order-button") {
       combineAndSendForms();
     }
-    else if ($(this).attr("id") === "after-submit-alias-button") {
-      goToPemesanan($(this).attr("data-ref"));
-    }
     else if ($(this).attr("id") === "add-review-button") {
       addReview($(this).attr("data-ref"));
+    }
+    else if ($(this).attr("id") === "send-review-button") {
+      combineAndSendReviews();
     }
   })
 });
@@ -108,6 +108,54 @@ function combineAndSendForms() {
   sendRequest(pesanan)
 }
 
+function combineAndSendReviews() {
+  var form = document.createElement("form");
+  var button = document.createElement("button");
+  button.setAttribute("type", "submit")
+  button.setAttribute("value", "submit")
+
+  form.setAttribute("type", "submit")
+  
+  var inputs = document.querySelectorAll('input');
+  var i;
+
+  for(i = 0; i < inputs.length; i += 4) {
+    var hidangan = inputs[i].value;
+    var rating = parseInt(inputs[i + 1].value);
+    var nama = inputs[i + 2].value;
+    var komentar = inputs[i + 3].value;
+    
+    if(rating > 0) {
+      var input_hidangan = document.createElement("input");
+      input_hidangan.setAttribute("type", "hidden");
+      input_hidangan.setAttribute("name", "review");
+      input_hidangan.setAttribute("value", hidangan);
+      input_hidangan.setAttribute("rating", rating);
+      input_hidangan.setAttribute("nama", nama);
+      input_hidangan.setAttribute("komentar", komentar);
+
+      form.appendChild(input_hidangan);
+    }
+  }
+
+  $(document.body).append(form);
+ 
+  var review = createReviewJSON();
+
+  sendRequestReview(review)
+}
+
+function sendRequestReview(data) {
+  var xhr = new XMLHttpRequest();
+  var url = "/pemesanan";
+  xhr.open("POST", url, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.onreadystatechange = function () {
+  };
+
+  xhr.send(data);
+}
+
 function sendRequest(data) {
   var xhr = new XMLHttpRequest();
   var url = "/pemesanan";
@@ -118,6 +166,7 @@ function sendRequest(data) {
 
   xhr.send(data);
 }
+
 function createJSON() {
   jsonObj = [];
   $("input[name=hidangan]").each(function() {
@@ -128,6 +177,33 @@ function createJSON() {
       item = {}
       item ["nama-hidangan"] = nama_hidangan;
       item ["kuantitas"] = kuantitas;
+
+      jsonObj.push(item);
+  });
+
+  return JSON.stringify(jsonObj);
+}
+
+function createReviewJSON() {
+  jsonObj = [];
+  $("input[name=review]").each(function() {
+
+      var rating = $(this).attr("rating");
+      var nama_hidangan = $(this).val();
+      var nama = $(this).attr("nama");
+      var komentar = $(this).attr("komentar");
+
+
+      item = {}
+      item ["nama-hidangan"] = nama_hidangan;
+      item ["rating"] = parseInt(rating);
+      if (nama != "") {
+        item ["nama"] = nama;
+      }
+      if (komentar != "") {
+        item ["komentar"] = komentar;
+      }
+
 
       jsonObj.push(item);
   });

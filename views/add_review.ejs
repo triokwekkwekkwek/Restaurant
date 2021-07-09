@@ -16,19 +16,18 @@
         <%  pemesanan = pesanan[0].pesanan;
             for(var i = 0; i < pemesanan.length; i++) {%>
             <li class="pesanan">
-                <span><%= pemesanan[i].nama %></span> <br>
-                <span><%= pemesanan[i].kuantitas %></span> <br>
-                <button id="add-review-button" data-ref="<%= i %>">Add Review</button>
+                <span><%= pemesanan[i].nama %></span>
+                sebanyak <span><%= pemesanan[i].kuantitas %></span> porsi <br>
+                klik tambahkan review untuk mengisi review <br>
+                <button id="add-review-button" data-ref="<%= i %>">Tambah Review</button>
                 <br>
 
                 <div id="review-form_<%= i %>" style="display: none;">
-                  <form action="/add_review" method="POST">
+                  <form>
                       <input type="hidden" name="nama" value="<%= pemesanan[i].nama %>">
-                      <input type="text" placeholder="rating" name="rating">
-                      <input type="text" placeholder="nama" name="nama">
-                      <input type="text" placeholder="komentar" name="komentar">
-              
-                      <button type="submit">Submit</button>
+                      <input type="text" placeholder=0 name="rating">
+                      <input type="text" placeholder="anonim" name="nama">
+                      <input type="text" placeholder=" " name="komentar">
                   </form>   
                 </div>
                 <br>
@@ -37,6 +36,7 @@
         <% } %>
     </ul>
 
+    <button id="send-review-button" type="submit" onclick = combineAndSendReviews()>Submit Review</button>
 
     <script src="/main.js"></script>
   </body>

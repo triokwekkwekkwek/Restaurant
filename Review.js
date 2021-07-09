@@ -18,21 +18,13 @@ MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
 })
 
 app.listen(3002, () => {
-    console.log('Server running in 3001');
+    console.log('Server running in 3002');
 })
 
 app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => {
     res.render('review.ejs')
-})
-
-app.get('/list-pemesanan', (req, res) => {
-    db.collection('Pemesanan').find().toArray()
-    .then(results => {
-         console.log(results)
-         res.json(results)
-     }).catch(/* ... */)
 })
 
 app.use(express.static('public'))
@@ -60,38 +52,52 @@ app.get('/pemesanan', (req, res) => {
     }
 })
 
-app.post('/pemesanan', (req, res) => {
+app.post('/pesan', (req, res) => {
     res.redirect('/pemesanan')
 })
 
-// app.post('/pesanan', (req, res) => {
-//     db.collection('Pemesanan').find({alias_name: req.body.alias}).toArray()
-//     .then(results => {
-//         console.log(results)
-//         list_pesanan = results;
+app.post('/pemesanan', (req, res) => {
+    console.log(req.body);
 
-//         res.render('add_review.ejs', {pesanan: list_pesanan})
-//     })
-//     .catch(/* ... */)
-//     res.redirect('/pesanan');
-// })
+    var count = Object.keys(req.body).length;
+    var i;
 
-// function render_add_review(list) {
-//     app.get('/pesanan', (req, res) => {
-//         res.render('add_review.ejs', {pesanan: list})
-//     })
-// }
+    for (i = 0; i <  count; i++) {
+        var embeddedDocument = [];
+        var hidangan = req.body[i]['nama-hidangan'];
+        
+        delete req.body[i]['nama-hidangan'];
+        embeddedDocument = req.body[i];
+        embeddedDocument.date = new Date();
 
-// app.post('/pesanan', (req, res) => {
-//         db.collection('Pemesanan').find({alias_name: req.body.alias}).toArray()
-//         .then(results => {
-//             console.log(results)
-//             list = results;
+        console.log(hidangan);
+        console.log(embeddedDocument);
 
-//             render_add_review(list)
-//         }).catch(/* ... */);
-//         res.redirect('/pesanan')
-// })
+        db.collection('Menu').find({nama: hidangan}).toArray()
+        .then(result =>{
+            console.log(result[0]);
+            var id_rev = get_id_review(result[0]);
+            console.log(id_rev);
+            db.collection('Review').findOneAndUpdate(
+                { _id : id_rev},
+                { $push : {reviews:  embeddedDocument} }
+            );
+        })
+        .catch(error => console.error(error))   
+    }
+    res.redirect('/')
+})
+
+function get_id_review(object) {
+    var nama = object.nama;
+    var page = object.page_count - 1;
+    var page_num = page.toString();
+
+    nama = nama.replace(" ", "_");
+    page_num = "_" + page_num;
+
+    return nama.concat(page_num);
+}
 
 
 

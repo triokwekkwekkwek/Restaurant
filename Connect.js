@@ -40,11 +40,18 @@ app.get('/', (req, res) => {
 })
 
 app.post('/menu', (req, res) => {
-    var document = {_id: new require('mongodb').ObjectID, 
+    var nama = req.body.nama;
+    var id = new require('mongodb').ObjectID;
+    var id_review = new require('mongodb').ObjectID;
+    var document = {_id: id, 
                     jenis: parseInt(req.body.jenis),
-                    nama: req.body.nama,
+                    nama: nama,
                     deskripsi: req.body.deskripsi,
-                    harga: parseInt(req.body.harga)}
+                    harga: parseInt(req.body.harga),
+                    page_count: 1,
+                    id_reviews: [{  page: 0,
+                                    id_review: generate_review_id(nama.replace(" ", "_"), "_0") }]
+                }
 
     db.collection('Menu').insertOne(document)
     .then(result => {
@@ -52,17 +59,17 @@ app.post('/menu', (req, res) => {
     })
     .catch(error => console.error(error));
 
-    var reviewDocument = { _id: new require('mongodb').ObjectID,
-                           id_hidangan: {
-                               "$ref": "Menu",
-                               "$id": document._id,
-                           },
+    var reviewDocument = { _id: generate_review_id(nama.replace(" ", "_"), "_0"),
+                           nama_hidangan: nama,
                            count: 0,
-                           reviews: [{}],
                            date: new Date()
                         }
     db.collection('Review').insertOne(reviewDocument)
 })
+
+function generate_review_id(nama_hidangan, page) {
+    return nama_hidangan.concat(page);
+}
 
 app.get('/', (req, res) => {
     db.collection('Menu').find().toArray()
