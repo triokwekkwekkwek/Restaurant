@@ -1,0 +1,52 @@
+<!-- index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Star Wars Quote App</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+  </head>
+
+  <body>
+    <form action="/menu" method="POST">
+        <input type="text" placeholder="jenis" name="jenis">
+        <input type="text" placeholder="nama" name="nama">
+        <input type="text" placeholder="deskripsi" name="deskripsi">
+        <input type="text" placeholder="harga" name="harga">
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2> Quotes </h2>
+
+    <ul class="menus">
+    <!-- Loop through quotes -->
+        <% for(var i = 0; i < menu.length; i++) {%>
+            <li class="menu">
+                <span><%= menu[i].nama %></span> <br>
+                <span><%= menu[i].deskripsi %></span> <br>
+                Rp <span><%= menu[i].harga %></span> <br>
+                <button id="edit-button" data-ref="<%= i %>">Edit</button>
+                <button id="delete-button" data-name= "<%= menu[i].nama %>" data-ref="<%= i %>">Delete</button>
+                <br>
+                <br>
+
+                <div id="input-form_<%= i %>" style="display: none;">
+                  <form action="/menu-update" method="POST" >
+                      <input type="hidden" name="nama" value="<%= menu[i].nama %>">
+                      <input type="text" placeholder="deskripsi" name="deskripsi">
+                      <input type="text" placeholder="harga" name="harga">
+              
+                      <button type="submit">Submit</button>
+                  </form>   
+                </div>
+                <br>
+                <br>
+            </li>
+        <% } %>
+    </ul>
+
+
+    <script src="/main.js"></script>
+  </body>
+</html>
