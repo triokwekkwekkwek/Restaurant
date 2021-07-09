@@ -15,8 +15,8 @@ MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
     const pemesananCollection = db.collection('Pemesanan');
 })
 
-app.listen(3003, () => {
-    console.log('Server running in 3003')
+app.listen(3001, () => {
+    console.log('Server running in 3001')
 })
 
 app.set('view engine', 'ejs')

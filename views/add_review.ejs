@@ -1,0 +1,43 @@
+<!-- index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Add review</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+  </head>
+
+  <body>
+    <h2> Tambahkan review hidangan </h2>
+
+    <ul class="review_pemesanan">
+    <!-- Loop through quotes -->
+    <h3> Pesanan Anda </h2>
+        <%  pemesanan = pesanan[0].pesanan;
+            for(var i = 0; i < pemesanan.length; i++) {%>
+            <li class="pesanan">
+                <span><%= pemesanan[i].nama %></span> <br>
+                <span><%= pemesanan[i].kuantitas %></span> <br>
+                <button id="add-review-button" data-ref="<%= i %>">Add Review</button>
+                <br>
+
+                <div id="review-form_<%= i %>" style="display: none;">
+                  <form action="/add_review" method="POST">
+                      <input type="hidden" name="nama" value="<%= pemesanan[i].nama %>">
+                      <input type="text" placeholder="rating" name="rating">
+                      <input type="text" placeholder="nama" name="nama">
+                      <input type="text" placeholder="komentar" name="komentar">
+              
+                      <button type="submit">Submit</button>
+                  </form>   
+                </div>
+                <br>
+                <br>
+            </li>
+        <% } %>
+    </ul>
+
+
+    <script src="/main.js"></script>
+  </body>
+</html>

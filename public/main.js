@@ -31,6 +31,12 @@ $('button').each(function() {
     else if ($(this).attr("id") === "order-button") {
       combineAndSendForms();
     }
+    else if ($(this).attr("id") === "after-submit-alias-button") {
+      goToPemesanan($(this).attr("data-ref"));
+    }
+    else if ($(this).attr("id") === "add-review-button") {
+      addReview($(this).attr("data-ref"));
+    }
   })
 });
 
@@ -41,6 +47,15 @@ function editMenu(val) {
     } else {
       x.style.display = "none";
     }
+}
+
+function addReview(val) {
+  var x = document.getElementById("review-form_" + val);
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
 }
 
 function deleteMenu(val) {

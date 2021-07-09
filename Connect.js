@@ -13,10 +13,11 @@ MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
     // Storing a reference to the database so you can use it later
     db = client.db(dbName)
     const menuCollection = db.collection('Menu');
+    const reviewCollection = db.collection('Review');
 })
 
-app.listen(3003, () => {
-    console.log('Server running in 3003')
+app.listen(3000, () => {
+    console.log('Server running in 3000')
 })
 
 app.set('view engine', 'ejs')
@@ -45,11 +46,22 @@ app.post('/menu', (req, res) => {
                     deskripsi: req.body.deskripsi,
                     harga: parseInt(req.body.harga)}
 
-    menuCollection.insertOne(document)
+    db.collection('Menu').insertOne(document)
     .then(result => {
         res.redirect('/');
     })
-    .catch(error => console.error(error))
+    .catch(error => console.error(error));
+
+    var reviewDocument = { _id: new require('mongodb').ObjectID,
+                           id_hidangan: {
+                               "$ref": "Menu",
+                               "$id": document._id,
+                           },
+                           count: 0,
+                           reviews: [{}],
+                           date: new Date()
+                        }
+    db.collection('Review').insertOne(reviewDocument)
 })
 
 app.get('/', (req, res) => {

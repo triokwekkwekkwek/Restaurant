@@ -1,0 +1,28 @@
+<!-- index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Add Review</title>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    </head>
+
+    <body>
+        <h2>Review Hidangan</h2> <br>
+
+        <body>
+            <form action="/" method="POST">
+                <input type="text" placeholder="alias" name="alias">
+        
+                <button type="submit" data-ref="after-submit-alias">Submit</button>
+            </form>
+
+            <div id="after-submit-alias">
+                <form action="/pemesanan" method="POST">
+                    <input type="hidden" name="nama" value="nama">
+                    <button type="submit">Add review</button>
+                </form>
+            </div>
+        <script src="/main.js"></script>
+    </body>
+</html>
