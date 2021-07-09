@@ -31,11 +31,11 @@ $('button').each(function() {
     else if ($(this).attr("id") === "order-button") {
       combineAndSendForms();
     }
-    else if ($(this).attr("id") === "after-submit-alias-button") {
-      goToPemesanan($(this).attr("data-ref"));
-    }
     else if ($(this).attr("id") === "add-review-button") {
       addReview($(this).attr("data-ref"));
+    }
+    else if ($(this).attr("id") === "send-review-button") {
+      combineAndSendReviews();
     }
   })
 });
@@ -108,6 +108,54 @@ function combineAndSendForms() {
   sendRequest(pesanan);
 }
 
+function combineAndSendReviews() {
+  var form = document.createElement("form");
+  var button = document.createElement("button");
+  button.setAttribute("type", "submit")
+  button.setAttribute("value", "submit")
+
+  form.setAttribute("type", "submit")
+  
+  var inputs = document.querySelectorAll('input');
+  var i;
+
+  for(i = 0; i < inputs.length; i += 4) {
+    var hidangan = inputs[i].value;
+    var rating = parseInt(inputs[i + 1].value);
+    var nama = inputs[i + 2].value;
+    var komentar = inputs[i + 3].value;
+    
+    if(rating > 0) {
+      var input_hidangan = document.createElement("input");
+      input_hidangan.setAttribute("type", "hidden");
+      input_hidangan.setAttribute("name", "review");
+      input_hidangan.setAttribute("value", hidangan);
+      input_hidangan.setAttribute("rating", rating);
+      input_hidangan.setAttribute("nama", nama);
+      input_hidangan.setAttribute("komentar", komentar);
+
+      form.appendChild(input_hidangan);
+    }
+  }
+
+  $(document.body).append(form);
+ 
+  var review = createReviewJSON();
+
+  sendRequestReview(review)
+}
+
+function sendRequestReview(data) {
+  var xhr = new XMLHttpRequest();
+  var url = "/pemesanan";
+  xhr.open("POST", url, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.onreadystatechange = function () {
+  };
+
+  xhr.send(data);
+}
+
 function sendRequest(data) {
     var xhr = new XMLHttpRequest();
     var url = "/pemesanan";
@@ -118,6 +166,7 @@ function sendRequest(data) {
 
   xhr.send(data);
 }
+
 function createJSON() {
   jsonObj = [];
   $("input[name=hidangan]").each(function() {
@@ -135,47 +184,30 @@ function createJSON() {
   return JSON.stringify(jsonObj);
 }
 
-// function completeOrder(orders) {
-//   const final_orders = JSON.parse(orders);
-//   var target = document.createElement("ul");
-//   var button = document.createElement("button");
 
-//   console.log(typeof(final_orders));
+function createReviewJSON() {
+  jsonObj = [];
+  $("input[name=review]").each(function() {
 
-//   for (var i = 0; i < final_orders.length; i++){
-//     console.log(final_orders[i].nama_hidangan);
-//     var list = document.createElement("li");
-//     var nama_hidangan = '';
-//     var kuantitas = '';
+      var rating = $(this).attr("rating");
+      var nama_hidangan = $(this).val();
+      var nama = $(this).attr("nama");
+      var komentar = $(this).attr("komentar");
 
-//     list.setAttribute("class", "order-list");
-//     list.setAttribute("data-ref", i);
-//     list.setAttribute("id", "hidangan-" + i);
-//     nama_hidangan = document.createTextNode(final_orders[i].nama_hidangan);
-//     kuantitas = document.createTextNode(final_orders[i].kuantitas);
 
-//     list.appendChild(nama_hidangan);
-//     list.appendChild(document.createTextNode(" "));
-//     list.appendChild(kuantitas);
+      item = {}
+      item ["nama-hidangan"] = nama_hidangan;
+      item ["rating"] = parseInt(rating);
+      if (nama != "") {
+        item ["nama"] = nama;
+      }
+      if (komentar != "") {
+        item ["komentar"] = komentar;
+      }
 
-//     target.appendChild(list);
-//   }
 
-//   console.log(ul)
-//   button.setAttribute("id", "complete-order-button");
-//   button.appendChild(document.createTextNode("Bayar"));
+      jsonObj.push(item);
+  });
 
-//   $(document.body).append(target);
-// }
-
-// function update_status_pemesanan(val) {
-//     function editMenu(val) {
-//       var x = document.getElementById("input-form_" + val);
-//       if (x.style.display === "none") {
-//         x.style.display = "block";
-//       } else {
-//         x.style.display = "none";
-//       }
-//   }
-
-// }
+  return JSON.stringify(jsonObj);
+}
