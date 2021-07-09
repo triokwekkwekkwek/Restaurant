@@ -70,23 +70,42 @@ app.post('/pemesanan', (req, res) => {
         embeddedDocument = req.body[i];
         embeddedDocument.date = new Date();
 
+        console.log(i);
         console.log(hidangan);
         console.log(embeddedDocument);
 
         db.collection('Menu').find({nama: hidangan}).toArray()
-        .then(result =>{
+        .then(result => {
             console.log(result[0]);
+            console.log(".........")
             var id_rev = get_id_review(result[0]);
             console.log(id_rev);
-            db.collection('Review').findOneAndUpdate(
+            db.collection('Review').update(
                 { _id : id_rev},
-                { $push : {reviews:  embeddedDocument} }
-            );
+                { $inc : {"count":  1}},
+                { $push : {"reviews":  embeddedDocument}}
+            )
+            
+            // if (get_count(result[0]) == 9) {
+            //     var id_menu = get_id(result);
+            //     var page = get_page_count(result);
+            //     var id_review = generate_review_id(hidangan, page);
+            //     db.collection('Menu').findOneAndUpdate(
+            //         { _id : id_menu},
+            //         { $push : { id_reviews:  id_review}},
+            //         { $inc : {page_count:  1}}
+            //     );
+            // }
         })
-        .catch(error => console.error(error))   
+        .catch(error => console.error(error))
+           
     }
     res.redirect('/')
 })
+
+function get_page_count(object) {
+    return object,page_count;
+}
 
 function get_id_review(object) {
     var nama = object.nama;
@@ -97,6 +116,18 @@ function get_id_review(object) {
     page_num = "_" + page_num;
 
     return nama.concat(page_num);
+}
+
+function get_count(object) {
+    return (object.count);
+}
+
+function get_id(object) {
+    return (object._id);
+}
+
+function generate_review_id(nama_hidangan, page) {
+    return nama_hidangan.concat(page);
 }
 
 
