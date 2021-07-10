@@ -125,7 +125,7 @@ function add_review(nama_hidangan, review) {
     
                     db.collection('Menu').update(
                         { _id : id_menu},
-                        { $push : { id_reviews:  id_review},
+                        { $push : { id_reviews:  {page: page, id_review: id_review}},
                           $inc : {page_count:  1}
                         }
                     );
