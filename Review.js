@@ -89,7 +89,6 @@ app.post('/pemesanan', (req, res) => {
         add_review(nama_hidangan[i], reviews[i]);
     }
 
-    res.redirect('/');
 })
 
 function add_review(nama_hidangan, review) {
@@ -101,7 +100,12 @@ function add_review(nama_hidangan, review) {
 
             db.collection('Review').findOneAndUpdate(
                 { _id : id_rev},
-                { $push : {reviews:  review},
+                { $push : {
+                    reviews:  {
+                        $each: [ review ],
+                    $position: 0,
+                    }
+                },
                   $inc : {count: 1}
                 }
             )
@@ -122,13 +126,6 @@ function add_review(nama_hidangan, review) {
                     console.log(reviewDocument);
                     
                     db.collection('Review').insertOne( reviewDocument );
-    
-                    db.collection('Menu').update(
-                        { _id : id_menu},
-                        { $push : { id_reviews:  {page: page, id_review: id_review}},
-                          $inc : {page_count:  1}
-                        }
-                    );
                 }
             })
             .catch(error => console.error(error))
