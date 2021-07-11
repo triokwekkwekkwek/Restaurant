@@ -36,6 +36,7 @@ $('button').each(function() {
     }
     else if ($(this).attr("id") === "send-review-button") {
       combineAndSendReviews();
+      sendThankyou();
     }
   })
 });
@@ -142,7 +143,6 @@ function orderpayment(list_order) {
 
 function pemesananStatusUpdate(order_details) {
   var details = JSON.stringify(order_details);
-  // var alias_name = JSON.stringify(order_details[0].alias_name);
   console.log(alias_name);
   var form = document.createElement("form");
   var button = document.createElement("button");
@@ -161,7 +161,7 @@ function pemesananStatusUpdate(order_details) {
   $(document.body).append(form);
 
   sendRequest("/order-payment", details);
-  // sendRequest("/cek_status_pembayaran", details);
+  sendRequest("/cek_status_pembayaran", details);
 }
 
 function combineAndSendReviews() {
@@ -221,6 +221,10 @@ function sendRequest(target, data) {
   };
 
   xhr.send(data);
+}
+
+function sendThankyou() {
+  swal("Terima kasih!", "Review yang anda tinggalkan sangat berharga bagi kami!", "success");
 }
 
 function createJSON() {

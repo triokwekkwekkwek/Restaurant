@@ -7,6 +7,8 @@ const url = 'mongodb+srv://amalja0:sokcantik@penjualan-rumah.jqla1.mongodb.net/m
 const dbName = 'Menu-Online-Restaurant'
 let db = MongoClient.connection
 
+var order_alias = "";
+
 MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
     if (err) return console.log(err)
 
@@ -70,16 +72,21 @@ app.post('/order-payment', (req, res) => {
         }
     )
     .then(result => {
-        
+        order_alias = req.body[0]['alias_name'];
     })
     .catch(error => console.error);
 })
 
 app.post('/cek_status_pembayaran', (req, res) => {
-    console.log(req.body);
-    res.redirect('/receipt/' + req.body);
+    if (order_alias != " "){
+        console.log(order_alias);
+        res.redirect('/receipt');
+    }
+    else {
+        console.log("order tidak ada");
+    }
 })
 
-app.get('/receipt/:details', (req, res) => {
-    res.render('receipt.ejs', {message: req.params.details});
+app.get('/receipt', (req, res) => {
+    res.render('receipt.ejs', {message: order_alias});
 })
