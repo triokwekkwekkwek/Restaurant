@@ -1,0 +1,59 @@
+<!-- menu.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Pemesanan</title>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    </head>
+
+    <body>
+        <h2>Selamat Datanggggg</h2> <br>
+
+        <div>
+            <h3>Makanan</h3> <br>
+            <ul class="menus">
+                <% for(var i = 0; i < menu.length; i++) {%>
+                    <%if (menu[i].jenis == 0) { %>
+                        <li class="hidangan">
+                            <span><%= menu[i].nama %></span> <br>
+                            <span><%= menu[i].deskripsi %></span> <br>
+                            Rp <span><%= menu[i].harga %></span> <br>
+                            <form action="/review" method="POST">
+                                <input type="hidden" name="name" value="<%= menu[i].nama %>">
+                                <button type="submit">Lihat Review</button>
+                            </form>
+                            <br>
+                        </li>
+                    <% } %>
+                <% } %>
+            </ul>
+
+            <h3>Minuman</h3> <br>
+            <ul class="menus">
+                <% for(var i = 0; i < menu.length; i++) {%>
+                    <%if (menu[i].jenis == 1) { %>
+                        <li class="hidangan">
+                            <span><%= menu[i].nama %></span> <br>
+                            <span><%= menu[i].deskripsi %></span> <br>
+                            Rp <span><%= menu[i].harga %></span> <br>
+                            <form action="/review" method="POST">
+                                <input type="hidden" name="name" value="<%= menu[i].nama %>">
+                                <button type="submit">Lihat Review</button>
+                            </form>
+                            <br>
+                        </li>
+                    <% } %>
+                <% } %>
+            </ul>
+
+            <form action="/pemesanan" method="GET">
+                <input type="hidden" name="nama" value="nama">
+                <button type="submit">Add review</button>
+            </form>
+
+        </div>
+
+        <script src="/main.js"></script>
+    </body>
+</html>

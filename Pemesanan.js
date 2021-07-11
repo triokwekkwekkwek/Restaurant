@@ -23,7 +23,20 @@ app.listen(3001, () => {
 
 app.set('view engine', 'ejs')
 
+app.use(express.static('public'))
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 app.get('/', (req, res) => {
+    db.collection('Menu').find().toArray()
+      .then(results => {
+        res.render('menu.ejs', { menu: results })
+      })
+      .catch(/* ... */)
+})
+
+app.get('/pemesanan', (req, res) => {
     db.collection('Menu').find().toArray()
       .then(results => {
         res.render('pemesanan.ejs', { menu: results })
@@ -31,10 +44,19 @@ app.get('/', (req, res) => {
       .catch(/* ... */)
 })
 
-app.use(express.static('public'))
+app.post('/review', (req, res) => {
+    console.log(req.body);
+    db.collection('Review').find({nama_hidangan: req.body.name}).toArray()
+      .then(results => {
+          console.log(JSON.stringify(results, null, 4));
+          res.render('menu-review.ejs', { review: results })
+      })
+      .catch(/* ... */)
+})
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.get('/review', (req, res) => {
+    res.redirect('..');
+})
 
 app.post('/pemesanan', (req, res) => {
     var count = Object.keys(req.body).length;
