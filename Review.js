@@ -37,7 +37,13 @@ app.post('/', (req, res) => {
     db.collection('Pemesanan').find({alias_name: req.body.alias}).toArray()
     .then(results => {
         console.log(results)
-        list_pesanan = results;
+        // list_pesanan = results
+        if(results[0]['status'] === true) {
+            list_pesanan = results;
+        }
+        else {
+            console.log("belum bayar");
+        }  
     })
     .catch(/* ... */)
     res.redirect('/');

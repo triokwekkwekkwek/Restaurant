@@ -39,7 +39,7 @@ app.post('/pemesanan', (req, res) => {
     var embeddedDocument = [];
     var i;
 
-    for (i = 0; i <  count; i++) {
+    for (i = 1; i < count ; i++) {
         embeddedDocument.push({  
             nama : req.body[i]['nama_hidangan'],
             kuantitas : parseInt(req.body[i]['kuantitas']),
@@ -47,7 +47,7 @@ app.post('/pemesanan', (req, res) => {
     }
 
     var document = {_id: new require('mongodb').ObjectID,
-                    alias_name: createAlias(),
+                    alias_name: req.body[0]['alias_name'],
                     createdAt: new Date(),
                     pesanan: embeddedDocument,
                     status: false
@@ -58,17 +58,28 @@ app.post('/pemesanan', (req, res) => {
         
     })
     .catch(error => console.error(error))
-
-    res.send('<h1>Hello Express!</h1>');
 })
 
-function createAlias() {
-    const characters ='abcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    const charactersLength = characters.length;
-    for ( let i = 0; i < 5; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
+app.post('/order-payment', (req, res) => {
+    db.collection('Pemesanan').findOneAndUpdate(
+        {alias_name: req.body[0]['alias_name']},
+        {
+            $set: {
+                status: true
+            }
+        }
+    )
+    .then(result => {
+        
+    })
+    .catch(error => console.error);
+})
 
-    return result;
-}
+app.post('/cek_status_pembayaran', (req, res) => {
+    console.log(req.body);
+    res.redirect('/receipt/' + req.body);
+})
+
+app.get('/receipt/:details', (req, res) => {
+    res.render('receipt.ejs', {message: req.params.details});
+})

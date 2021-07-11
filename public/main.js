@@ -79,10 +79,12 @@ function decrement(val) {
 function combineAndSendForms() {
   var form = document.createElement("form");
   var button = document.createElement("button");
-  button.setAttribute("type", "submit")
-  button.setAttribute("value", "submit")
+  button.setAttribute("type", "submit");
+  button.setAttribute("value", "submit");
 
-  form.setAttribute("type", "submit")
+  form.setAttribute("type", "submit");
+  form.setAttribute("method", "POST");
+  form.setAttribute("action", "/pemesanan");
   
   var inputs = document.querySelectorAll('input');
   var i;
@@ -104,8 +106,62 @@ function combineAndSendForms() {
   $(document.body).append(form);
  
   var pesanan = createJSON();
+  sendRequest("/pemesanan", pesanan);
+  orderpayment(pesanan);
+}
 
-  sendRequest(pesanan);
+function orderpayment(list_order) {
+  orders = JSON.parse(list_order);
+
+  var div =  document.getElementById("order-list");
+  var ul = document.createElement("ul");
+  var button = document.createElement("button");
+
+  for(var i = 1; i < orders.length; i++) {
+    var list = document.createElement("li");
+    var nama_hidangan = document.createTextNode(orders[i].nama_hidangan);
+    var kuantitas = document.createTextNode(orders[i].kuantitas);
+
+    list.setAttribute("class", "detail=order");
+    list.appendChild(nama_hidangan);
+    list.appendChild(document.createTextNode("    "));
+    list.appendChild(kuantitas);
+
+    ul.appendChild(list);
+  }
+
+  button.appendChild(document.createTextNode("Bayar"));
+  button.setAttribute("id", "payment-button");
+  button.setAttribute("type", "submit");
+  button.setAttribute("onclick", "pemesananStatusUpdate(orders)");
+
+  div.appendChild(ul);
+  div.appendChild(button);
+  $(document.body).append(div);
+}
+
+function pemesananStatusUpdate(order_details) {
+  var details = JSON.stringify(order_details);
+  // var alias_name = JSON.stringify(order_details[0].alias_name);
+  console.log(alias_name);
+  var form = document.createElement("form");
+  var button = document.createElement("button");
+  var input = document.createElement("input");
+
+  form.setAttribute("action", "/cek_status_pembayaran");
+  form.setAttribute("method", "POST");
+  button.setAttribute("type", "submit");
+  button.appendChild(document.createTextNode("Cek Status pembayaran"));
+  input.setAttribute("type", "hidden");
+  input.setAttribute("nama", "nama");
+  input.setAttribute("value", order_details[0].alias_name);
+
+  form.appendChild(input);
+  form.appendChild(button);
+  $(document.body).append(form);
+
+  sendRequest("/order-payment", details);
+  // sendRequest("/cek_status_pembayaran", details);
 }
 
 function combineAndSendReviews() {
@@ -156,9 +212,9 @@ function sendRequestReview(data) {
   xhr.send(data);
 }
 
-function sendRequest(data) {
+function sendRequest(target, data) {
     var xhr = new XMLHttpRequest();
-    var url = "/pemesanan";
+    var url = target;
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onreadystatechange = function () {
@@ -169,6 +225,10 @@ function sendRequest(data) {
 
 function createJSON() {
   jsonObj = [];
+  alias_name = {};
+  alias_name ["alias_name"] = createAlias();
+
+  jsonObj.push(alias_name);
   $("input[name=hidangan]").each(function() {
 
       var kuantitas = $(this).attr("kuantitas");
@@ -183,8 +243,6 @@ function createJSON() {
 
   return JSON.stringify(jsonObj);
 }
-
-
 function createReviewJSON() {
   jsonObj = [];
   $("input[name=review]").each(function() {
@@ -210,4 +268,14 @@ function createReviewJSON() {
   });
 
   return JSON.stringify(jsonObj);
+}
+function createAlias() {
+  const characters ='abcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  const charactersLength = characters.length;
+  for ( let i = 0; i < 5; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+
+  return result;
 }
