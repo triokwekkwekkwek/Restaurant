@@ -42,7 +42,6 @@ app.get('/', (req, res) => {
 app.post('/menu', (req, res) => {
     var nama = req.body.nama;
     var id = new require('mongodb').ObjectID;
-    var id_review = new require('mongodb').ObjectID;
     var document = {_id: id, 
                     jenis: parseInt(req.body.jenis),
                     nama: nama,
@@ -50,7 +49,7 @@ app.post('/menu', (req, res) => {
                     harga: parseInt(req.body.harga),
                     page_count: 1,
                     id_reviews: [{  page: 0,
-                                    id_review: generate_review_id(nama.replace(" ", "_"), "_0") }]
+                                    id_review: generate_review_id(nama.replaceAll(" ", "_"), "_0") }]
                 }
 
     db.collection('Menu').insertOne(document)
@@ -59,7 +58,7 @@ app.post('/menu', (req, res) => {
     })
     .catch(error => console.error(error));
 
-    var reviewDocument = { _id: generate_review_id(nama.replace(" ", "_"), "_0"),
+    var reviewDocument = { _id: generate_review_id(nama.replaceAll(" ", "_"), "_0"),
                            nama_hidangan: nama,
                            count: 0,
                            date: new Date()
@@ -96,13 +95,34 @@ app.post('/menu-update', (req, res) => {
     .catch(error => console.error(error));
 })
 app.delete('/menu', (req, res) => {
-    db.collection('Menu').deleteOne(
-      { nama: req.body.nama }
-    )
+
+    db.collection('Menu').find(
+        { nama: req.body.nama }
+    ).toArray()
     .then(result => {
+        console.log(result[0]);
+        var reviews = get_all_review(result[0]);
+        reviews.forEach(element => {
+            console.log(element.id_review);
+            delete_review(element.id_review);
+        });
+
+        db.collection('Menu').deleteOne(
+            { _id: result[0]._id }
+        );
+
         res.redirect('/');
-        console.log(result);
-      })
+    })
     .catch(error => console.error(error));
 })
+
+function delete_review(id_review) {
+    db.collection('Review').deleteOne(
+        { _id: id_review}
+    )
+}
+
+function get_all_review(object) {
+    return object.id_reviews;
+}
 

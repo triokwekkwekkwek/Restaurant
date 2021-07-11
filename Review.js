@@ -66,51 +66,84 @@ app.post('/pemesanan', (req, res) => {
     console.log(req.body);
 
     var count = Object.keys(req.body).length;
+    console.log(count);
     var i;
+
+    var reviews = [];
+    var nama_hidangan = [];
 
     for (i = 0; i <  count; i++) {
         var embeddedDocument = [];
         var hidangan = req.body[i]['nama-hidangan'];
+        nama_hidangan.push(hidangan);
         
         delete req.body[i]['nama-hidangan'];
         embeddedDocument = req.body[i];
         embeddedDocument.date = new Date();
 
-        console.log(i);
-        console.log(hidangan);
-        console.log(embeddedDocument);
+        reviews.push(embeddedDocument);
 
-        db.collection('Menu').find({nama: hidangan}).toArray()
+        console.log(embeddedDocument);
+    }
+
+    console.log("Panjang review" + reviews.length);
+
+    for (i = 0; i < count; i++) {
+        console.log(nama_hidangan[i]);
+        console.log(reviews[i]);
+
+        add_review(nama_hidangan[i], reviews[i]);
+    }
+
+    res.redirect('/');
+})
+
+function add_review(nama_hidangan, review) {
+        db.collection('Menu').find({nama: nama_hidangan}).toArray()
         .then(result => {
             console.log(result[0]);
             console.log(".........")
             var id_rev = get_id_review(result[0]);
-            console.log(id_rev);
-            db.collection('Review').update(
+
+            db.collection('Review').findOneAndUpdate(
                 { _id : id_rev},
-                { $inc : {"count":  1}},
-                { $push : {"reviews":  embeddedDocument}}
+                { $push : {reviews:  review},
+                  $inc : {count: 1}
+                }
             )
-            
-            // if (get_count(result[0]) == 9) {
-            //     var id_menu = get_id(result);
-            //     var page = get_page_count(result);
-            //     var id_review = generate_review_id(hidangan, page);
-            //     db.collection('Menu').findOneAndUpdate(
-            //         { _id : id_menu},
-            //         { $push : { id_reviews:  id_review}},
-            //         { $inc : {page_count:  1}}
-            //     );
-            // }
+            .then(rev_result => {
+                console.log(rev_result.value);
+                if (get_count(rev_result.value) == 9) {
+                    console.log(result[0]);
+                    var id_menu = get_id(result[0]);
+                    var page = get_page_count(result[0]);
+                    var id_review = generate_review_id(nama_hidangan, page);
+    
+                    var reviewDocument = { _id: id_review,
+                               nama_hidangan: nama_hidangan,
+                               count: 0,
+                               date: new Date()
+                    }
+
+                    console.log(reviewDocument);
+                    
+                    db.collection('Review').insertOne( reviewDocument );
+    
+                    db.collection('Menu').update(
+                        { _id : id_menu},
+                        { $push : { id_reviews:  {page: page, id_review: id_review}},
+                          $inc : {page_count:  1}
+                        }
+                    );
+                }
+            })
+            .catch(error => console.error(error))
         })
         .catch(error => console.error(error))
-           
-    }
-    res.redirect('/')
-})
+}
 
 function get_page_count(object) {
-    return object,page_count;
+    return object.page_count;
 }
 
 function get_id_review(object) {
@@ -118,7 +151,7 @@ function get_id_review(object) {
     var page = object.page_count - 1;
     var page_num = page.toString();
 
-    nama = nama.replace(" ", "_");
+    nama = nama.replaceAll(" ", "_");
     page_num = "_" + page_num;
 
     return nama.concat(page_num);
@@ -133,8 +166,8 @@ function get_id(object) {
 }
 
 function generate_review_id(nama_hidangan, page) {
+    nama_hidangan = nama_hidangan.replaceAll(" ", "_");
+    page = "_" + page.toString();
+
     return nama_hidangan.concat(page);
 }
-
-
-
