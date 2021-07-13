@@ -79,25 +79,25 @@ app.post('/pemesanan', (req, res) => {
 
     db.collection('Pemesanan').insertOne(document)
     .then(result => {
-        
+        order_alias = req.body[0]['alias_name'];
     })
     .catch(error => console.error(error))
 })
 
-app.post('/order-payment', (req, res) => {
-    db.collection('Pemesanan').findOneAndUpdate(
-        {alias_name: req.body[0]['alias_name']},
-        {
-            $set: {
-                status: true
-            }
-        }
-    )
-    .then(result => {
-        order_alias = req.body[0]['alias_name'];
-    })
-    .catch(error => console.error);
-})
+// app.post('/order-payment', (req, res) => {
+//     db.collection('Pemesanan').findOneAndUpdate(
+//         {alias_name: req.body[0]['alias_name']},
+//         {
+//             $set: {
+//                 status: true
+//             }
+//         }
+//     )
+//     .then(result => {
+//         order_alias = req.body[0]['alias_name'];
+//     })
+//     .catch(error => console.error);
+// })
 
 app.post('/cek_status_pembayaran', (req, res) => {
     if (order_alias != " "){

@@ -41,6 +41,9 @@ $('button').each(function() {
     // else if($(this).attr("id") === "review-button") {
     //   showReview($(this).attr("data-ref"));
     // }
+    else if ($(this).attr("id") === "pay-button") {
+      finalize_Payment();
+    }
   })
 });
 
@@ -88,6 +91,11 @@ function increment(val) {
 
 function decrement(val) {
   document.getElementById('demoInput_' + val).stepDown();
+}
+
+function finalize_Payment() {
+  var table = document.getElementById('order-details');
+  table.style.display = 'block';
 }
 
 function combineAndSendForms() {
@@ -144,7 +152,7 @@ function orderpayment(list_order) {
     ul.appendChild(list);
   }
 
-  button.appendChild(document.createTextNode("Bayar"));
+  button.appendChild(document.createTextNode("Selesai"));
   button.setAttribute("id", "payment-button");
   button.setAttribute("type", "submit");
   button.setAttribute("onclick", "pemesananStatusUpdate(orders)");
@@ -164,7 +172,7 @@ function pemesananStatusUpdate(order_details) {
   form.setAttribute("action", "/cek_status_pembayaran");
   form.setAttribute("method", "POST");
   button.setAttribute("type", "submit");
-  button.appendChild(document.createTextNode("Cek Status pembayaran"));
+  button.appendChild(document.createTextNode("Bayar"));
   input.setAttribute("type", "hidden");
   input.setAttribute("nama", "nama");
   input.setAttribute("value", order_details[0].alias_name);
@@ -173,7 +181,7 @@ function pemesananStatusUpdate(order_details) {
   form.appendChild(button);
   $(document.body).append(form);
 
-  sendRequest("/order-payment", details);
+  // sendRequest("/order-payment", details);
   sendRequest("/cek_status_pembayaran", details);
 }
 
