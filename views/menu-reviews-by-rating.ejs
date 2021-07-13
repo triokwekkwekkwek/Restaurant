@@ -14,18 +14,16 @@
             <h3>Makanan</h3> <br>
             <ul class="reviews">
                 <% for(var i = 0; i < review.length; i++) {%>
-                    <% for(var j = 0; j < review[i].reviews.length; j++) {%>
                         <li class="review">
-                            <span>Rating: </span><%= review[i].reviews[j].rating%><br>
-                            <% if (review[i].reviews[j].nama !== undefined) {%>
-                                <span>Reviewer: </span><%= review[i].reviews[j].nama%><br>
+                            <span>Rating: </span><%= review[i].reviews.rating%><br>
+                            <% if (review[i].reviews.nama !== undefined) {%>
+                                <span>Reviewer: </span><%= review[i].reviews.nama%><br>
                             <% } %>
-                            <% if (review[i].reviews[j].komentar !== undefined) {%>
-                                <span><%= review[i].reviews[j].komentar%></span><br>
+                            <% if (review[i].reviews.komentar !== undefined) {%>
+                                <span><%= review[i].reviews.komentar%></span><br>
                             <% } %>
                             <br>
                         </li>
-                    <% } %>
                 <% } %>
             </ul>
 

@@ -44,10 +44,28 @@ app.get('/pemesanan', (req, res) => {
 
 app.post('/review', (req, res) => {
     console.log(req.body);
-    db.collection('Review').find({nama_hidangan: req.body.name}).toArray()
+    db.collection('Review').find(
+        {nama_hidangan: req.body.name,
+        reviews: { $exists: true }}
+    ).toArray()
+    .then(results => {
+      console.log(JSON.stringify(results, null, 4));
+      res.render('menu-review.ejs', { review: results })
+    })
+    .catch(/* ... */)
+})
+
+app.post('/review/review-by-rating', (req, res) => {
+    console.log(req.body);
+    db.collection('Review').aggregate([
+        { "$match" : { "nama_hidangan" : req.body.nama_hidangan}},
+        { "$unwind" : "$reviews"},
+        { "$match" : { "reviews.rating" : parseInt(req.body.rating)}}
+    ])
+      .toArray()
       .then(results => {
           console.log(JSON.stringify(results, null, 4));
-          res.render('menu-review.ejs', { review: results })
+          res.render('menu-reviews-by-rating.ejs', { review: results })
       })
       .catch(/* ... */)
 })
