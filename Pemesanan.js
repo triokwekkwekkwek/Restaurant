@@ -58,6 +58,7 @@ app.post('/review', (req, res) => {
 })
 
 app.post('/review/review-by-rating', (req, res) => {
+    var reviews = [];
     console.log(req.body);
     db.collection('Review').aggregate([
         { "$match" : { "nama_hidangan" : req.body.nama_hidangan}},
@@ -67,13 +68,23 @@ app.post('/review/review-by-rating', (req, res) => {
       .toArray()
       .then(results => {
           console.log(JSON.stringify(results, null, 4));
-          res.render('menu-reviews-by-rating.ejs', { review: results })
+          if (results.length == 0) {
+              reviews.push({"nama_hidangan": req.body.nama_hidangan})
+              res.render('menu-reviews-by-rating.ejs', { review: reviews})
+          }
+          else {
+            res.render('menu-reviews-by-rating.ejs', { review: results})
+          }
       })
       .catch(/* ... */)
 })
 
 app.get('/review', (req, res) => {
     res.redirect('..');
+})
+
+app.get('/review/review-by-rating', (req, res) => {
+    res.redirect('/../review');
 })
 
 app.post('/pemesanan', (req, res) => {
@@ -102,20 +113,6 @@ app.post('/pemesanan', (req, res) => {
     .catch(error => console.error(error))
 })
 
-// app.post('/order-payment', (req, res) => {
-//     db.collection('Pemesanan').findOneAndUpdate(
-//         {alias_name: req.body[0]['alias_name']},
-//         {
-//             $set: {
-//                 status: true
-//             }
-//         }
-//     )
-//     .then(result => {
-//         order_alias = req.body[0]['alias_name'];
-//     })
-//     .catch(error => console.error);
-// })
 
 app.post('/cek_status_pembayaran', (req, res) => {
     if (order_alias != " "){

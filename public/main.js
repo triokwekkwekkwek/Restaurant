@@ -38,9 +38,6 @@ $('button').each(function() {
       combineAndSendReviews();
       sendThankyou();
     }
-    // else if($(this).attr("id") === "review-button") {
-    //   showReview($(this).attr("data-ref"));
-    // }
     else if ($(this).attr("id") === "pay-button") {
       finalize_Payment();
     }
@@ -74,16 +71,6 @@ function deleteMenu(val) {
     })
   })
 }
-
-// function showReview(val) {
-//   fetch('/review', {
-//     method:'get',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({
-//       nama_hidangan: val
-//     })
-//   })
-// }
 
 function increment(val) {
   document.getElementById('demoInput_' + val).stepUp();

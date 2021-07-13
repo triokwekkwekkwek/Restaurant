@@ -13,6 +13,7 @@
         <div>
             <h3>Makanan</h3> <br>
             <ul class="reviews">
+            <% if (review[0].reviews !== undefined) {%>
                 <% for(var i = 0; i < review.length; i++) {%>
                         <li class="review">
                             <span>Rating: </span><%= review[i].reviews.rating%><br>
@@ -25,6 +26,9 @@
                             <br>
                         </li>
                 <% } %>
+            <% } else { %>
+                <span><b>Belum ada review</b> </span><br><br>
+            <% } %>
             </ul>
 
             <% for(var i = 1; i < 6; i++) {%>
@@ -35,7 +39,7 @@
                 </form>   
             <% } %>
     
-            <form action="/review" method="GET">
+            <form action="/review/review-by-rating" method="GET">
                 <input type="hidden" name="name" value="name">
                 <button type="submit">Back</button>
             </form>

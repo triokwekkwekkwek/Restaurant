@@ -86,8 +86,6 @@ app.post('/pemesanan', (req, res) => {
         console.log(embeddedDocument);
     }
 
-    console.log("Panjang review" + reviews.length);
-
     for (i = 0; i < count; i++) {
         console.log(nama_hidangan[i]);
         console.log(reviews[i]);
