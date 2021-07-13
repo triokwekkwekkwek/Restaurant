@@ -1,0 +1,47 @@
+<!-- index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Pemesanan</title>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    </head>
+
+    <body>
+        <h2>Selamat Datanggggg</h2> <br>
+
+        <div>
+            <h3>Makanan</h3> <br>
+            <ul class="reviews">
+                <% for(var i = 0; i < review.length; i++) {%>
+                        <li class="review">
+                            <span>Rating: </span><%= review[i].reviews.rating%><br>
+                            <% if (review[i].reviews.nama !== undefined) {%>
+                                <span>Reviewer: </span><%= review[i].reviews.nama%><br>
+                            <% } %>
+                            <% if (review[i].reviews.komentar !== undefined) {%>
+                                <span><%= review[i].reviews.komentar%></span><br>
+                            <% } %>
+                            <br>
+                        </li>
+                <% } %>
+            </ul>
+
+            <% for(var i = 1; i < 6; i++) {%>
+                <form action="/review/review-by-rating" method="POST" >
+                    <input type="hidden" name="nama_hidangan" value="<%=review[0].nama_hidangan%>">
+                    <input type="hidden" name="rating" value="<%=i%>">
+                    <button type="submit"><%=i%></button>
+                </form>   
+            <% } %>
+    
+            <form action="/review" method="GET">
+                <input type="hidden" name="name" value="name">
+                <button type="submit">Back</button>
+            </form>
+
+        </div>
+
+        <script src="/main.js"></script>
+    </body>
+</html>
