@@ -24,11 +24,52 @@ app.set('view engine', 'ejs')
 
 
 app.get('/', (req, res) => {
-    db.collection('Menu').find().toArray()
-        .then(results => {
-            res.render('index.ejs', { menu: results })
-        })
-        .catch( /* ... */ )
+    var hidangan = [];
+
+    db.collection('Review').aggregate([
+        {
+            $lookup:
+              {
+                from: "Menu",
+                localField: "nama_hidangan",
+                foreignField: "nama",
+                as: "menu"
+              }
+        },
+        {
+            $project: {
+               "nama_hidangan": 1,
+               "menu.jenis": 1,
+               "menu.deskripsi": 1,
+               "menu.harga": 1,
+               "reviews": { $ifNull: [ "$reviews", { "rating": 0 } ] }
+            }
+        },
+        { "$unwind" : "$reviews"},
+        {
+            $group: {
+              _id: "$nama_hidangan",
+              jenis: {
+                $first: "$menu.jenis"
+              },
+              deskripsi: {
+                $first: "$menu.deskripsi"
+              },
+              harga: {
+                $first: "$menu.harga"
+              },
+              ratingAvg: {
+                $avg: "$reviews.rating"
+              }
+            }
+        }
+    ])
+    .toArray()
+    .then(rev_results => {
+        console.log(JSON.stringify(rev_results, null, 4));
+        res.render('index.ejs', { menu: rev_results});
+    })
+    .catch( /* ... */ );
 })
 
 app.use(express.static('public'))
@@ -50,11 +91,7 @@ app.post('/menu', (req, res) => {
         nama: nama,
         deskripsi: req.body.deskripsi,
         harga: parseInt(req.body.harga),
-        page_count: 1,
-        id_reviews: [{
-            page: 0,
-            id_review: generate_review_id(nama.replaceAll(" ", "_"), "_0")
-        }]
+        page_count: 1
     }
 
     db.collection('Menu').insertOne(document)
@@ -76,14 +113,6 @@ function generate_review_id(nama_hidangan, page) {
     return nama_hidangan.concat(page);
 }
 
-app.get('/', (req, res) => {
-    db.collection('Menu').find().toArray()
-        .then(results => {
-            console.log(results)
-        })
-        .catch(error => console.error(error))
-})
-
 app.post('/menu-update', (req, res) => {
     db.collection('Menu').findOneAndUpdate({ nama: req.body.nama }, {
             $set: {
@@ -98,27 +127,6 @@ app.post('/menu-update', (req, res) => {
         .catch(error => console.error(error));
 })
 app.delete('/menu', (req, res) => {
-
-    db.collection('Menu').find({ nama: req.body.nama }).toArray()
-        .then(result => {
-            console.log(result[0]);
-            var reviews = get_all_review(result[0]);
-            reviews.forEach(element => {
-                console.log(element.id_review);
-                delete_review(element.id_review);
-            });
-
-            db.collection('Menu').deleteOne({ _id: result[0]._id });
-
-            res.redirect('/');
-        })
-        .catch(error => console.error(error));
+        db.collection('Menu').deleteOne({ nama: req.body.nama });
+        db.collection('Review').deleteMany({ nama_hidangan: req.body.nama });
 })
-
-function delete_review(id_review) {
-    db.collection('Review').deleteOne({ _id: id_review })
-}
-
-function get_all_review(object) {
-    return object.id_reviews;
-}
