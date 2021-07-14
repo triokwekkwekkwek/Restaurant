@@ -8,6 +8,7 @@ const pemesanan = []
 const dbName = 'Menu-Online-Restaurant'
 let db = MongoClient.connection
 var list_pesanan = [];
+var alias_name = "";
 
 MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
     if (err) return console.log(err)
@@ -40,6 +41,7 @@ app.post('/', (req, res) => {
         // list_pesanan = results
         if(results[0]['status'] === true) {
             list_pesanan = results;
+            alias_name = req.body.alias;
         }
         else {
             console.log("belum bayar");
@@ -92,6 +94,8 @@ app.post('/pemesanan', (req, res) => {
 
         add_review(nama_hidangan[i], reviews[i]);
     }
+
+    update_status_review();
 
 })
 
@@ -165,4 +169,18 @@ function generate_review_id(nama_hidangan, page) {
     page = "_" + page.toString();
 
     return nama_hidangan.concat(page);
+}
+
+function update_status_review() {
+    console.log("DISINIIIIII", alias_name);
+    db.collection('Pemesanan').findOneAndUpdate({ alias_name: alias_name }, {
+        $set: {
+           review_status: true
+        }
+    })
+    .then(result => {
+        res.redirect('/');
+        console.log(result);
+    })
+    .catch(error => console.error(error));
 }

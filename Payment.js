@@ -31,6 +31,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
     db.collection('Pemesanan').find().toArray()
       .then(results => {
+          console.log(results);
         res.render('payment.ejs', { list_pesanan: results })
        })
     //   .catch(/* ... */)

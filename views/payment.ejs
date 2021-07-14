@@ -3,13 +3,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Add review</title>
+    <title>Payment Confirmation</title>
     <link rel="stylesheet" href="bootstrap.css">
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
   </head>
 
   <body>
-    <h2> Verifikasi Pemesanan </h2> <br>
+    <h2> Verifikasi Pembayaran </h2> <br>
     <form action="/check_order" method="POST">
         <input type="text" placeholder="Kode Unik" name="alias_name">
         <button type="submit" id="pay-button">Bayar</button>
@@ -29,6 +29,7 @@
         </thead>
         <tbody>
             <% for(var i = 0; i < list_pesanan.length; i++) {%>
+              <%if (list_pesanan[i].alias_name != null) { %>
                 <tr>
                     <th scope="row"> <%= i + 1 %> </th>
                     <td><%= list_pesanan[i].alias_name %></td>
@@ -49,6 +50,7 @@
                         <% } %>
                     </td>
                 </tr>
+              <% } %>
             <% } %>
         </tbody>
       </table>

@@ -97,6 +97,7 @@ app.post('/menu-update', (req, res) => {
         })
         .catch(error => console.error(error));
 })
+
 app.delete('/menu', (req, res) => {
 
     db.collection('Menu').find({ nama: req.body.nama }).toArray()
@@ -114,6 +115,23 @@ app.delete('/menu', (req, res) => {
         })
         .catch(error => console.error(error));
 })
+
+app.get('/index',(req, res) => {
+    db.collection('Pemesanan').aggregate([
+        {
+            '$match': {'review_status': true}
+        }, 
+        {
+            '$count': 'number_of_review'
+        }
+    ])
+    .toArray()
+    .then((result) => {
+        res.render('index.ejs', { review_count: result });
+    })
+})
+   
+
 
 function delete_review(id_review) {
     db.collection('Review').deleteOne({ _id: id_review })
