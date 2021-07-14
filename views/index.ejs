@@ -40,18 +40,18 @@
         <ul class="menus">
             <!-- Loop through quotes -->
             <% for(var i = 0; i < menu.length; i++) {%>
-                <%if (menu[i].jenis == 0) { %>
+                <%if (menu[i].jenis[0] == 0) { %>
                     <li class="menu">
-                        <span><b><%= menu[i].nama %></b></span> <br>
-                        <span><%= menu[i].deskripsi %></span> <br> Rp <span><%= menu[i].harga %></span> <br>
+                        <span><b><%= menu[i]._id %></b></span> <br>
+                        <span><%= menu[i].deskripsi[0] %></span> <br> Rp <span><%= menu[i].harga[0] %></span> <br><span>Rating : </span><%= menu[i].ratingAvg %></span> <br>
                         <button id="edit-button" data-ref="<%= i %>">Edit</button>
-                        <button id="delete-button" data-name="<%= menu[i].nama %>" data-ref="<%= i %>">Delete</button>
+                        <button id="delete-button" data-name="<%= menu[i]._id %>" data-ref="<%= i %>">Delete</button>
                         <br>
                         <br>
 
                         <div id="input-form_<%= i %>" style="display: none;">
                             <form action="/menu-update" method="POST">
-                                <input type="hidden" name="nama" value="<%= menu[i].nama %>">
+                                <input type="hidden" name="nama" value="<%= menu[i]._id %>">
                                 <input type="text" placeholder="deskripsi" name="deskripsi">
                                 <input type="text" placeholder="harga" name="harga">
 
@@ -62,17 +62,17 @@
                         <br>
                     </li>
                     <% } %>
-                        <% } %>
+            <% } %>
         </ul>
         <br>
         <h2> Menu Minuman </h2>
         <ul class="menus">
             <!-- Loop through quotes -->
             <% for(var i = 0; i < menu.length; i++) {%>
-                <%if (menu[i].jenis == 1) { %>
+                <%if (menu[i].jenis[0] == 1) { %>
                     <li class="menu">
-                        <span><b><%= menu[i].nama %></b></span> <br>
-                        <span><%= menu[i].deskripsi %></span> <br> Rp <span><%= menu[i].harga %></span> <br>
+                        <span><b><%= menu[i]._id %></b></span> <br>
+                        <span><%= menu[i].deskripsi %></span> <br> Rp <span><%= menu[i].harga %></span> <br><span>Rating : </span><span><%= menu[i].ratingAvg %></span> <br>
                         <button id="edit-button" data-ref="<%= i %>">Edit</button>
                         <button id="delete-button" data-name="<%= menu[i].nama %>" data-ref="<%= i %>">Delete</button>
                         <br>
@@ -80,7 +80,7 @@
 
                         <div id="input-form_<%= i %>" style="display: none;">
                             <form action="/menu-update" method="POST">
-                                <input type="hidden" name="nama" value="<%= menu[i].nama %>">
+                                <input type="hidden" name="nama" value="<%= menu[i]._id %>">
                                 <input type="text" placeholder="deskripsi" name="deskripsi">
                                 <input type="text" placeholder="harga" name="harga">
 
@@ -91,7 +91,7 @@
                         <br>
                     </li>
                     <% } %>
-                        <% } %>
+            <% } %>
         </ul>
     </div>
 
