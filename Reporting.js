@@ -61,7 +61,7 @@ app.get('/', (req, res) => {
     ])
     .toArray()
     .then((result) => {
-
+        getStatPenjualan();
         db.collection('Pemesanan').aggregate([
             { $match: { 'status': true }},
             { $unwind : "$pesanan"},
@@ -72,6 +72,9 @@ app.get('/', (req, res) => {
                     $sum: "$pesanan.kuantitas"
                   }
                 }
+            },
+            {
+                $sort : { jumlah: -1}
             }
         ])
         .toArray()
@@ -129,6 +132,29 @@ function getStat(){
                     }
                 ]
             }
+        }
+    ])
+    .explain("executionStats")
+    .then((result) => {
+        console.log(result);
+        console.log("--------------------");
+    })
+}
+
+function getStatPenjualan(){
+    db.collection('Pemesanan').aggregate([
+        { $match: { 'status': true }},
+        { $unwind : "$pesanan"},
+        {
+            $group: {
+              _id: "$pesanan.nama",
+              jumlah: {
+                $sum: "$pesanan.kuantitas"
+              }
+            }
+        },
+        {
+            $sort : { jumlah: -1}
         }
     ])
     .explain("executionStats")
