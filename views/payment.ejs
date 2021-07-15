@@ -43,24 +43,21 @@
                                 <% for(var j = 0; j < list_pesanan[i].pesanan.length; j++) {%>
                                     <li>
                                         <%= list_pesanan[i].pesanan[j].nama %> (
-                                            <%= list_pesanan[i].pesanan[j].kuantitas %> buah)
+                                        <%= list_pesanan[i].pesanan[j].kuantitas %> buah)
                                     </li>
-                                    <% } %>
+                                <% } %>
                             </ul>
                         </td>
                         <td>
                             <%if (list_pesanan[i].status == true) { %>
                                 <b>Terbayar</b>
-                                <% }  else {%>
-                                    Belum dibayar
-                                    <% } %>
+                            <% }  else {%>
+                                Belum dibayar
+                            <% } %>
                         </td>
                     </tr>
-                    <<<<<<< Updated upstream <% } %>
-                        <% } %>
-                            =======
-                            <% } %>
-                                >>>>>>> Stashed changes
+                 <% } %>
+             <% } %>
         </tbody>
     </table>
 
