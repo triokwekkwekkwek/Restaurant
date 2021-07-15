@@ -24,8 +24,7 @@ app.set('view engine', 'ejs')
 
 
 app.get('/', (req, res) => {
-    var hidangan = [];
-
+    getStat();
     db.collection('Review').aggregate([
         {
             $lookup:
@@ -62,7 +61,8 @@ app.get('/', (req, res) => {
                 $avg: "$reviews.rating"
               }
             }
-        }
+        },
+        { $set: { ratingAvg: { $round: [ "$ratingAvg", 2 ] } } }
     ])
     .toArray()
     .then(rev_results => {
@@ -130,3 +130,50 @@ app.delete('/menu', (req, res) => {
         db.collection('Menu').deleteOne({ nama: req.body.nama });
         db.collection('Review').deleteMany({ nama_hidangan: req.body.nama });
 })
+
+function getStat(){
+    db.collection('Review').aggregate([
+        {
+            $lookup:
+              {
+                from: "Menu",
+                localField: "nama_hidangan",
+                foreignField: "nama",
+                as: "menu"
+              }
+        },
+        {
+            $project: {
+               "nama_hidangan": 1,
+               "menu.jenis": 1,
+               "menu.deskripsi": 1,
+               "menu.harga": 1,
+               "reviews": { $ifNull: [ "$reviews", { "rating": 0 } ] }
+            }
+        },
+        { "$unwind" : "$reviews"},
+        {
+            $group: {
+              _id: "$nama_hidangan",
+              jenis: {
+                $first: "$menu.jenis"
+              },
+              deskripsi: {
+                $first: "$menu.deskripsi"
+              },
+              harga: {
+                $first: "$menu.harga"
+              },
+              ratingAvg: {
+                $avg: "$reviews.rating"
+              }
+            }
+        },
+        { $set: { ratingAvg: { $round: [ "$ratingAvg", 2 ] } } }
+    ])
+    .explain("executionStats")
+    .then((result) => {
+        console.log(result);
+        console.log("--------------------");
+    })
+}
