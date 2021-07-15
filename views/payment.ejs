@@ -1,61 +1,71 @@
 <!-- index.ejs -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <title>Payment Confirmation</title>
     <link rel="stylesheet" href="bootstrap.css">
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-  </head>
+</head>
 
-  <body>
-    <h2> Verifikasi Pembayaran </h2> <br>
+<body>
+    <h2> Verifikasi Pemesanan </h2> <br>
     <form action="/check_order" method="POST">
         <input type="text" placeholder="Kode Unik" name="alias_name">
         <button type="submit" id="pay-button">Bayar</button>
     </form>
 
     <br>
- 
+
     <h2> Daftar Pemesanan </h2>
     <table class="table">
         <thead class="thead-dark">
-          <tr>
-            <th scope="col">No</th>
-            <th scope="col">Kode pemesanan</th>
-            <th scope="col">Detail</th>
-            <th scope="col">Status</th>
-          </tr>
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">Kode pemesanan</th>
+                <th scope="col">Detail</th>
+                <th scope="col">Status</th>
+            </tr>
         </thead>
         <tbody>
             <% for(var i = 0; i < list_pesanan.length; i++) {%>
-              <%if (list_pesanan[i].alias_name != null) { %>
-                <tr>
-                    <th scope="row"> <%= i + 1 %> </th>
-                    <td><%= list_pesanan[i].alias_name %></td>
-                    <td>
-                        <ul>
-                            <% for(var j = 0; j < list_pesanan[i].pesanan.length; j++) {%>
-                                <li>
-                                    <%= list_pesanan[i].pesanan[j].nama %>  (<%= list_pesanan[i].pesanan[j].kuantitas %> buah)
-                                </li>
-                            <% } %>
-                        </ul>
-                    </td>
-                    <td>
-                        <%if (list_pesanan[i].status == true) { %>
-                            <b>Terbayar</b>
-                        <% }  else {%>
-                            Belum dibayar
+                <%if (list_pesanan[i].alias_name != null) { %>
+                    <tr>
+                        <th scope="row">
+                            <%= i + 1 %>
+                        </th>
+                        <td>
+                            <%= list_pesanan[i].alias_name %>
+                        </td>
+                        <td>
+                            <ul>
+                                <% for(var j = 0; j < list_pesanan[i].pesanan.length; j++) {%>
+                                    <li>
+                                        <%= list_pesanan[i].pesanan[j].nama %> (
+                                            <%= list_pesanan[i].pesanan[j].kuantitas %> buah)
+                                    </li>
+                                    <% } %>
+                            </ul>
+                        </td>
+                        <td>
+                            <%if (list_pesanan[i].status == true) { %>
+                                <b>Terbayar</b>
+                                <% }  else {%>
+                                    Belum dibayar
+                                    <% } %>
+                        </td>
+                    </tr>
+                    <<<<<<< Updated upstream <% } %>
                         <% } %>
-                    </td>
-                </tr>
-              <% } %>
-            <% } %>
+                            =======
+                            <% } %>
+                                >>>>>>> Stashed changes
         </tbody>
-      </table>
+    </table>
 
     <script src="/main.js"></script>
     <script src="/bootstrap.bundle"></script>
-  </body>
+</body>
+
 </html>

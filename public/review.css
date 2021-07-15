@@ -16,12 +16,6 @@ body {
     background: #FFE3E0;
 }
 
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
 button {
     background-color: #EF6351;
     border: none;
@@ -45,30 +39,40 @@ button:active {
     color: black;
 }
 
-.review {
+input[type=text] {
+    border: none;
+    border-bottom: 2px solid #EF6351;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border-radius: 8px;
+}
+
+.inputreview {
     background: #FBC3BC;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
     padding: 10px 100px;
     text-align: left;
     margin-bottom: 15px;
 }
 
-.back {
-    background: #F38375;
-    width: 1255px;
-    padding: 25px 40px 25px 40px;
+.review_pemesanan {
+    background: #FBC3BC;
     text-align: center;
-    color: black;
-}
-
-#outer {
-    width: 100%;
-    text-align: center;
-    background: #F7A399;
-    margin-bottom: 15px;
+    justify-content: center;
+    align-items: center;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    padding: 10px 100px;
+    text-align: left;
+    margin-bottom: 15px;
 }
 
-.inner {
-    display: inline-block;
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }

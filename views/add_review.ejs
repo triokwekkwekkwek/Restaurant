@@ -1,44 +1,45 @@
 <!-- index.ejs -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <title>Add review</title>
+    <link rel="stylesheet" href="review.css">
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  </head>
+</head>
 
-  <body>
+<body>
     <h2> Tambahkan review hidangan </h2>
 
     <ul class="review_pemesanan">
-    <!-- Loop through quotes -->
-    <h3> Pesanan Anda </h2>
-        <%  pemesanan = pesanan[0].pesanan;
+        <!-- Loop through quotes -->
+        <h3> Pesanan Anda </h2>
+            <%  pemesanan = pesanan[0].pesanan;
             for(var i = 0; i < pemesanan.length; i++) {%>
-            <li class="pesanan">
-                <span><%= pemesanan[i].nama %></span>
-                sebanyak <span><%= pemesanan[i].kuantitas %></span> porsi <br>
-                klik tambahkan review untuk mengisi review <br>
-                <button id="add-review-button" data-ref="<%= i %>">Tambah Review</button>
-                <br>
+                <li class="pesanan">
+                    <span><%= pemesanan[i].nama %></span> sebanyak <span><%= pemesanan[i].kuantitas %></span> porsi <br> klik tambahkan review untuk mengisi review <br>
+                    <button id="add-review-button" data-ref="<%= i %>">Tambah Review</button>
+                    <br>
 
-                <div id="review-form_<%= i %>" style="display: none;">
-                  <form>
-                      <input type="hidden" name="nama" value="<%= pemesanan[i].nama %>">
-                      <input type="text" placeholder=0 name="rating">
-                      <input type="text" placeholder="anonim" name="nama">
-                      <input type="text" placeholder=" " name="komentar">
-                  </form>   
-                </div>
-                <br>
-                <br>
-            </li>
-        <% } %>
+                    <div id="review-form_<%= i %>" style="display: none;">
+                        <form>
+                            <input type="hidden" name="nama" value="<%= pemesanan[i].nama %>">
+                            <input type="text" placeholder="rating 1 - 5" name="rating">
+                            <input type="text" placeholder="Masukan Nama" name="nama">
+                            <input type="text" placeholder="Masukan Review " name="komentar">
+                        </form>
+                    </div>
+                    <br>
+                    <br>
+                </li>
+                <% } %>
     </ul>
 
     <button id="send-review-button" type="submit">Submit Review</button>
 
     <script src="/main.js"></script>
-  </body>
+</body>
+
 </html>

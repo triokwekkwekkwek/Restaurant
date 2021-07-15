@@ -1,7 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-body {
-    background-color: #ffe3e0;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: #FFE3E0;
 }
 
 .title {
@@ -64,7 +76,7 @@ button {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    padding: 14px 40px;
+    padding: 10px 20px;
     border-radius: 8px;
 }
 
@@ -83,6 +95,8 @@ input[type=text] {
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
+    border-radius: 8px;
+    border-radius: 8px;
 }
 
 .box-menu {

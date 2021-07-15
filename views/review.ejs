@@ -1,28 +1,40 @@
 <!-- index.ejs -->
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Add Review</title>
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-    </head>
 
-    <body>
-        <h2>Review Hidangan</h2> <br>
+<head>
+    <meta charset="UTF-8" />
+    <title>Add Review</title>
+    <link rel="stylesheet" href="review.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+</head>
 
-        <body>
-            <form action="/" method="POST">
-                <input type="text" placeholder="alias" name="alias">
-        
-                <button type="submit" data-ref="after-submit-alias">Submit</button>
+
+
+
+<body>
+    <h1>Review Hidangan</h1> <br>
+    <div class="inputreview">
+        <span>Cara Memberikan Review :</span><br>
+        <span>1. Masukan ID yang sama saat kamu melakukan pembayaran
+        </span><br>
+        <span>2. Tekan tombol <b>Submit</b><br>
+        </span>
+        <span>3. Setelah menekan tombol <b>Submit</b> lalu tekan tombol <b>Add Review</b></span>
+        <form action="/" method="POST">
+            <input type="text" placeholder="alias" name="alias">
+            <button type="submit" data-ref="after-submit-alias">Submit</button>
+        </form>
+        <br>
+        <div id="after-submit-alias">
+            <form action="/pesan" method="POST">
+                <input type="hidden" name="nama" value="nama">
+                <button type="submit">Add review</button>
             </form>
+        </div>
+    </div>
 
-            <div id="after-submit-alias">
-                <form action="/pesan" method="POST">
-                    <input type="hidden" name="nama" value="nama">
-                    <button type="submit">Add review</button>
-                </form>
-            </div>
-        <script src="/main.js"></script>
-    </body>
+    <script src="/main.js"></script>
+</body>
+
 </html>

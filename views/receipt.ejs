@@ -1,12 +1,20 @@
 <html>
-    <head>
-    </head>
-    <body>
-        <form action="/receipt">
-            <h2>Pesanan anda telah diterima!</h2>
-            <h4> 
-                Mohon menyerahkan kode: <%= message %> untuk melakukan pembayaran
-            </h4>
-        </form>
-    </body>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Kode Pembayaran</title>
+    <link rel="stylesheet" href="app.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+</head>
+
+<body>
+    <form action="/receipt">
+        <h2>Pesanan anda telah diterima!</h2>
+        <h4>
+            Mohon menyerahkan kode:
+            <%= message %> untuk melakukan pembayaran
+        </h4>
+    </form>
+</body>
+
 </html>

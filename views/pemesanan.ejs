@@ -2,64 +2,65 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8" />
-        <title>Pemesanan</title>
-        <link rel="stylesheet" href="pemesanan.css">
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-    </head>
+<head>
+    <meta charset="UTF-8" />
+    <title>Pemesanan</title>
+    <link rel="stylesheet" href="pemesanan.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+</head>
 
-    <body>
+<body>
 
-        <h2>Pesan Makanan Mu Sekarang</h2> <br>
+    <h2>Pesan Makanan Mu Sekarang</h2> <br>
 
-        <div>
-            <div class="makanan">
-                <h2>Makanan</h2> <br>
-                <ul class="menus">
-                    <% for(var i = 0; i < menu.length; i++) {%>
-                        <%if (menu[i].jenis == 0) { %>
-                            <li class="menu">
-                                <span><%= menu[i].nama %></span> <br>
-                                <span><%= menu[i].deskripsi %></span> <br> Rp <span><%= menu[i].harga %></span> <br>
-                                <input id="demoInput_<%= i %>" placeholder=0 data-name="<%= menu[i].nama %>" type=number min=0 max=110>
-                                <button data-ref="<%= i %>" id="increment-button">+</button>
-                                <button data-ref="<%= i %>" id="decrement-button">-</button>
-                                <br>
-                            </li>
+    <div>
+        <div class="makanan">
+            <h2>Makanan</h2> <br>
+            <ul class="menus">
+                <% for(var i = 0; i < menu.length; i++) {%>
+                    <%if (menu[i].jenis == 0) { %>
+                        <li class="menu">
+                            <span><%= menu[i].nama %></span> <br>
+                            <span><%= menu[i].deskripsi %></span> <br> Rp <span><%= menu[i].harga %></span> <br>
+                            <input id="demoInput_<%= i %>" placeholder=0 data-name="<%= menu[i].nama %>" type=number min=0 max=110>
+                            <button data-ref="<%= i %>" id="increment-button">+</button>
+                            <button data-ref="<%= i %>" id="decrement-button">-</button>
+                            <br>
+                        </li>
                         <% } %>
-                    <% } %>
-                </ul>
-            </div>
-
-            <div class="minuman">
-                <h2>Minuman</h2> <br>
-                <ul class="menus">
-                    <% for(var i = 0; i < menu.length; i++) {%>
-                        <%if (menu[i].jenis == 1) { %>
-                            <li class="menu">
-                                <span><%= menu[i].nama %></span> <br>
-                                <span><%= menu[i].deskripsi %></span> <br> Rp <span><%= menu[i].harga %></span> <br>
-                                <input id="demoInput_<%= i %>" placeholder=0 data-name="<%= menu[i].nama %>" type=number min=0 max=110>
-                                <button data-ref="<%= i %>" id="increment-button">+</button>
-                                <button data-ref="<%= i %>" id="decrement-button">-</button>
-                                <br>
-                            </li>
-                        <% } %>
-                    <% } %>
-                </ul>
-            </div>
-
-            <div class="pesan">
-                <button id="order-button" type="submit">Pesan</button>
-            </div>
-
-
-            <div id="order-list"></div>
-
+                            <% } %>
+            </ul>
         </div>
 
-        <script src="/main.js"></script>
-    </body>
+        <div class="minuman">
+            <h2>Minuman</h2> <br>
+            <ul class="menus">
+                <% for(var i = 0; i < menu.length; i++) {%>
+                    <%if (menu[i].jenis == 1) { %>
+                        <li class="menu">
+                            <span><%= menu[i].nama %></span> <br>
+                            <span><%= menu[i].deskripsi %></span> <br> Rp <span><%= menu[i].harga %></span> <br>
+                            <input id="demoInput_<%= i %>" placeholder=0 data-name="<%= menu[i].nama %>" type=number min=0 max=110>
+                            <button data-ref="<%= i %>" id="increment-button">+</button>
+                            <button data-ref="<%= i %>" id="decrement-button">-</button>
+                            <br>
+                        </li>
+                        <% } %>
+                            <% } %>
+            </ul>
+        </div>
+
+        <div class="pesan">
+            <button id="order-button" type="submit">Pesan</button>
+        </div>
+
+
+        <div id="order-list">
+        </div>
+
+    </div>
+
+    <script src="/main.js"></script>
+</body>
 
 </html>
