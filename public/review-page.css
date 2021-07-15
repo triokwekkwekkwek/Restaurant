@@ -48,9 +48,19 @@ button:active {
 .review {
     background: #FBC3BC;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    padding: 10px 100px;
+    padding: 10px 10px;
     text-align: left;
     margin-bottom: 15px;
+    width: 1255px;
+}
+
+.penjualan {
+    background: #FBC3BC;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    padding: 10px 10px;
+    text-align: left;
+    margin-bottom: 15px;
+    width: 1255px;
 }
 
 .back {
@@ -71,4 +81,10 @@ button:active {
 
 .inner {
     display: inline-block;
+}
+
+.penjualan_result {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 10px;
 }
