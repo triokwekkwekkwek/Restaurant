@@ -132,23 +132,6 @@ app.delete('/menu', (req, res) => {
         db.collection('Review').deleteMany({ nama_hidangan: req.body.nama });
 })
 
-app.get('/index',(req, res) => {
-    db.collection('Pemesanan').aggregate([
-        {
-            '$match': {'review_status': true}
-        }, 
-        {
-            '$count': 'number_of_review'
-        }
-    ])
-    .toArray()
-    .then((result) => {
-        res.render('index.ejs', { review_count: result });
-    })
-})
-   
-
-
 function delete_review(id_review) {
     db.collection('Review').deleteOne({ _id: id_review })
 }
