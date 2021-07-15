@@ -61,27 +61,44 @@ app.get('/', (req, res) => {
     ])
     .toArray()
     .then((result) => {
-        var total_pembayaran;
-        var total_review;
-        var tanggal = new Date();
-        tanggal = tanggal.toDateString();
 
-        if (result[0]['Terbayar'][0] == undefined) {
-            total_pembayaran = 0
-        } else {
-            total_pembayaran = total_pembayaran = result[0]['Terbayar'][0]['dibayar'];
-        }
+        db.collection('Pemesanan').aggregate([
+            { $match: { 'status': true }},
+            { $unwind : "$pesanan"},
+            {
+                $group: {
+                  _id: "$pesanan.nama",
+                  jumlah: {
+                    $sum: "$pesanan.kuantitas"
+                  }
+                }
+            }
+        ])
+        .toArray()
+        .then((penjualan_result) => {
+            console.log(JSON.stringify(penjualan_result, null, 4))
+            var total_pembayaran;
+            var total_review;
+            var tanggal = new Date();
+            tanggal = tanggal.toDateString();
+
+            if (result[0]['Terbayar'][0] == undefined) {
+                total_pembayaran = 0
+            } else {
+                total_pembayaran = total_pembayaran = result[0]['Terbayar'][0]['dibayar'];
+            }
         
-        if ( result[0]['Direview'][0] == undefined) {
-            total_review = 0
-        }
-        else {
-            total_review = result[0]['Direview'][0]['direview'];
-        }
+            if (result[0]['Direview'][0] == undefined) {
+                total_review = 0
+            }
+            else {
+                total_review = result[0]['Direview'][0]['direview'];
+            }
 
-        res.render('daily-report.ejs', { tanggal: tanggal, review_count: total_review, paid_count: total_pembayaran });
-    })
-    .catch(/* ... */)
+            res.render('daily-report.ejs', { tanggal: tanggal, review_count: total_review, paid_count: total_pembayaran, penjualan:  penjualan_result});
+            });
+        })
+        .catch(/* ... */)
 })
 
 function getStat(){

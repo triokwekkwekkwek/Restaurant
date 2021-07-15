@@ -160,7 +160,7 @@ function getStat(){
                "reviews": { $ifNull: [ "$reviews", { "rating": 0 } ] }
             }
         },
-        { "$unwind" : "$reviews"},
+        { $unwind : "$reviews"},
         {
             $group: {
               _id: "$nama_hidangan",

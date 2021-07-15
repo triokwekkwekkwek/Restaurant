@@ -59,6 +59,8 @@ app.post('/review', (req, res) => {
 
 app.post('/review/review-by-rating', (req, res) => {
     var reviews = [];
+
+    getStat(req);
     console.log(req.body);
     db.collection('Review').aggregate([
         { "$match" : { "nama_hidangan" : req.body.nama_hidangan}},
@@ -127,3 +129,16 @@ app.post('/cek_status_pembayaran', (req, res) => {
 app.get('/receipt', (req, res) => {
     res.render('receipt.ejs', {message: order_alias});
 })
+
+function getStat(req){
+    db.collection('Review').aggregate([
+        { "$match" : { "nama_hidangan" : req.body.nama_hidangan}},
+        { "$unwind" : "$reviews"},
+        { "$match" : { "reviews.rating" : parseInt(req.body.rating)}}
+    ])
+    .explain("executionStats")
+    .then((result) => {
+        console.log(result);
+        console.log("--------------------");
+    })
+}

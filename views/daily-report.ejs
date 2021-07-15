@@ -16,5 +16,18 @@
                 <p> <%= review_count %> </p>
             </form>
         </div>
+
+        <div class="penjualan">
+            <h2>Penjualan</h2> <br>
+            <ul class="penjualan_result">
+                <% for(var i = 0; i < penjualan.length; i++) {%>
+                    <li class="menu">
+                        <span><%= penjualan[i]._id %></span> <br>
+                        <span>Total: </span><span><%= penjualan[i].jumlah %></span>
+                        <br><br>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
     </body>
 </html>
