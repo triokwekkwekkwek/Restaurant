@@ -5,12 +5,14 @@
 <head>
     <meta charset="UTF-8" />
     <title>Review By Rating</title>
-    <link rel="stylesheet" href="review-by-rating.css">
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/review-by-rating.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js">
+    </script>
 </head>
 
 <body>
-    <h2>Makan Banyak Mengenyangkan</h2> <br>
+    <br>
+    <h2>Makan Banyak Mengenyangkan</h2>
 
     <div>
         <h3>Review Hidangan</h3> <br>
@@ -18,10 +20,10 @@
             <% if (review[0].reviews !== undefined) {%>
                 <% for(var i = 0; i < review.length; i++) {%>
                     <li class="review">
-                        <span>Rating: </span>
+                        <span><b>Rating:</b> </span>
                         <%= review[i].reviews.rating%><br>
                             <% if (review[i].reviews.nama !== undefined) {%>
-                                <span>Reviewer: </span>
+                                <span><b>Reviewer:</b> </span>
                                 <%= review[i].reviews.nama%><br>
                                     <% } %>
                                         <% if (review[i].reviews.komentar !== undefined) {%>
@@ -34,19 +36,23 @@
                             <span><b>Belum ada review</b> </span><br><br>
                             <% } %>
         </ul>
-
-        <% for(var i = 1; i < 6; i++) {%>
-            <form action="/review/review-by-rating" method="POST">
-                <input type="hidden" name="nama_hidangan" value="<%=review[0].nama_hidangan%>">
-                <input type="hidden" name="rating" value="<%=i%>">
-                <button type="submit"><%=i%></button>
-            </form>
-            <% } %>
-
-                <form action="/review/review-by-rating" method="GET">
-                    <input type="hidden" name="name" value="name">
-                    <button type="submit">Back</button>
+        <div class="byrating">
+            <% for(var i = 1; i < 6; i++) {%>
+                <form action="/review/review-by-rating" method="POST">
+                    <input type="hidden" name="nama_hidangan" value="<%=review[0].nama_hidangan%>">
+                    <input type="hidden" name="rating" value="<%=i%>">
+                    <button type="submit"><%=i%></button>
                 </form>
+                <% } %>
+        </div>
+
+        <div class="back">
+            <form action="/review/review-by-rating" method="GET">
+                <input type="hidden" name="name" value="name">
+                <button type="submit">Back</button>
+            </form>
+        </div>
+
 
     </div>
 
